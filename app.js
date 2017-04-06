@@ -2,6 +2,7 @@ const path = require('path');
 const Koa = require('koa');
 const route = require('koa-route');
 const render = require('koa-ejs');
+const serve = require('koa-static');
 
 const app = new Koa();
 render(app, {
@@ -15,5 +16,6 @@ render(app, {
 app.use(route.get('/', async function (ctx) {
   await ctx.render('index');
 }));
+app.use(serve(__dirname + '/html/static'));
 
 const server = app.listen(8000);

@@ -19,3 +19,10 @@ app.use(route.get('/', async function (ctx) {
 app.use(serve(__dirname + '/html/static'));
 
 const server = app.listen(8000);
+
+const io = require('socket.io').listen(server);
+io.on('connection', (socket) => {
+  socket.on('comment', (data) => {
+    socket.emit('commented', {'value':data.value});
+  });
+});

@@ -1,3 +1,5 @@
+const socket = io();
+
 var canvas = document.getElementById('canvas');
 if(canvas.getContext) {
   var ctx = canvas.getContext('2d');
@@ -21,15 +23,18 @@ var comments = [];
 var comment = document.getElementById('comment');
 comment.addEventListener('keydown', (event) => {
   if(event.keyCode == 13) {
-    commentWidth = ctx.measureText(comment.value).width;
-    comments.push({
-      msg: comment.value,
-      speed: commentSpeed(commentWidth),
-      x: canvasWidth,
-      lane: commentLane(commentWidth)
-    });
-    comment.value = '';
+    socket.emit('comment', {'value':comment.value});
   }
+});
+socket.on('commented', (data) => {
+  commentWidth = ctx.measureText(data.value).width;
+  comments.push({
+    msg: data.value,
+    speed: commentSpeed(commentWidth),
+    x: canvasWidth,
+    lane: commentLane(commentWidth)
+  });
+  comment.value = '';
 });
 
 function commentSpeed(commentWidth) {

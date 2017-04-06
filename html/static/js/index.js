@@ -6,6 +6,13 @@ if(canvas.getContext) {
   alert('君はモダンブラウザを使うフレンズじゃないんだね....');
 }
 
+resizer();
+window.addEventListener('resize', resizer);
+function resizer() {
+  canvas.setAttribute('width', window.innerWidth);
+  canvas.setAttribute('height', window.innerHeight);
+}
+
 var canvasWidth = canvas.clientWidth;
 var canvasHeight = canvas.clientHeight;
 var lineHeight = 30;
@@ -26,7 +33,7 @@ comment.addEventListener('keydown', (event) => {
 });
 
 function commentSpeed(commentWidth) {
-  let speed = (canvasWidth+commentWidth) / 250;
+  let speed = (canvasWidth+commentWidth) / 500;
   return speed;
 }
 
@@ -48,7 +55,7 @@ function commentLane(commentWidth) {
 }
 
 function draw() {
-  ctx.clearRect(0, 0, 300, 150);
+  ctx.clearRect(0, 0, canvasWidth, canvasHeight);
   ctx.font = '30px serif';
   comments.forEach((val, index) => {
     ctx.fillText(val.msg, val.x, lineHeight*(val.lane+1));

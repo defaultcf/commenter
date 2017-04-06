@@ -1,0 +1,24 @@
+{
+  "name": "commenter",
+  "version": "1.0.0",
+  "description": "コメントするやつ",
+  "main": "app.js",
+  "dependencies": {
+    "koa": "^2.2.0",
+    "koa-ejs": "^4.0.0",
+    "koa-route": "^3.2.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/i544c/commenter.git"
+  },
+  "author": "Isaac",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/i544c/commenter/issues"
+  },
+  "homepage": "https://github.com/i544c/commenter#readme"
+}

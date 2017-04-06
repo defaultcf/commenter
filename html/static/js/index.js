@@ -9,41 +9,51 @@ if(canvas.getContext) {
 var canvasWidth = canvas.clientWidth;
 var canvasHeight = canvas.clientHeight;
 var lineHeight = 30;
+var lane = Math.floor(canvasHeight / lineHeight);
 var comments = [];
 var comment = document.getElementById('comment');
-var tweet = document.getElementById('tweet');
-tweet.addEventListener('click', (event) => {
-  comments.push({
-    msg: comment.value,
-    x: canvasWidth,
-    y: commentY()
-  });
-  comment.value = '';
+comment.addEventListener('keydown', (event) => {
+  if(event.keyCode == 13) {
+    commentWidth = ctx.measureText(comment.value).width;
+    comments.push({
+      msg: comment.value,
+      speed: commentSpeed(commentWidth),
+      x: canvasWidth,
+      lane: commentLane(commentWidth)
+    });
+    comment.value = '';
+  }
 });
+
+function commentSpeed(commentWidth) {
+  let speed = (canvasWidth+commentWidth) / 250;
+  return speed;
+}
 
 /*
  * そのコメントのY座標を決定する
  * @return {number} 決定されたY座標を返す
  */
-function commentY() {
-  let count = 0;
-  comments.forEach((val, index) => {
-    if(val.x + ctx.measureText(val.msg).width > canvasWidth) {
-      count++;
+function commentLane(commentWidth) {
+  for(let i = 0; i < lane; i++) {
+    let sameLane = comments.filter((element, index, array) => {
+      return element.lane == i;
+    });
+    if(sameLane.length == 0) return i;
+    let last = sameLane.pop();
+    if((last.x+ctx.measureText(last.msg).width) / last.speed < canvasWidth / commentSpeed(commentWidth)) {
+      return i;
     }
-  });
-  console.log(count);
-  return lineHeight * (count + 1);
+  }
 }
 
 function draw() {
   ctx.clearRect(0, 0, 300, 150);
   ctx.font = '30px serif';
   comments.forEach((val, index) => {
-    ctx.fillText(val.msg, val.x, val.y);
-    val.x -= 1;
+    ctx.fillText(val.msg, val.x, lineHeight*(val.lane+1));
+    val.x -= val.speed;
     if(val.x + ctx.measureText(val.msg).width < 0) {
-      console.log("消すよ");
       comments.splice(index, 1);
     }
   });
